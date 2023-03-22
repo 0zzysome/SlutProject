@@ -5,10 +5,11 @@ using System;
 public class Player : GameObject
 {
     public float Timer { get; set; }= 1;
+    public int TimerMax { get; set; }= 1;
     public int Direction { get; set; }
 
     //kankse göra till array
-    public Queue<Rectangle> bodyList = new Queue<Rectangle>();
+    public List<Rectangle> bodyList = new List<Rectangle>();
 
     public int Movement(int lastMove)
     {
@@ -43,42 +44,39 @@ public class Player : GameObject
 3
 4
     */
-    public void remove()
-    {
-        Rectangle r = bodyList.Dequeue();
-    }
+    
     public void addToQueue(int Interval, int direc)
     {
         switch (direc)
         {
             case 0:
-                Rectangle temp = bodyList.Peek();
+                Rectangle temp = bodyList[bodyList.Count-1];
                 x = (int)temp.x;
                 y = (int)temp.y - Interval;
             break;
             case 1:
-                Rectangle temp1 = bodyList.Peek();
+                Rectangle temp1 = bodyList[bodyList.Count-1];
                 x = (int)temp1.x + Interval;
                 y = (int)temp1.y;
             break;
             case 2:
-                Rectangle temp2 = bodyList.Peek();
+                Rectangle temp2 = bodyList[bodyList.Count-1];
                 x = (int)temp2.x;
                 y = (int)temp2.y + Interval;
             break;
             case 3:
-                Rectangle temp3 = bodyList.Peek();
+                Rectangle temp3 = bodyList[bodyList.Count-1];
                 x = (int)temp3.x - Interval;
                 y = (int)temp3.y;
             break;
             default:
-                Rectangle temp4 = bodyList.Peek();
+                Rectangle temp4 = bodyList[bodyList.Count-1];
                 x = (int)temp4.x - Interval;
                 y = (int)temp4.y;
             break;
         }
         Rectangle r1 = new Rectangle(x,y, (Interval-1), (Interval-1));
-        bodyList.Enqueue(r1);
+        bodyList.Add(r1);
 
         
     }
@@ -87,15 +85,25 @@ public class Player : GameObject
     public void CreateBody(int Interval)
     {
         Rectangle r1 = new Rectangle((Interval*5),(Interval*5), (Interval-1), (Interval-1));
-        bodyList.Enqueue(r1);
+        bodyList.Add(r1);
     }
-    public void delayTimer()
+    // ser om spelaren har döt (retunera true om det är fallet)
+    public bool IsDead(Vector2 screenSize,int interval, Rectangle Head)
     {
-        
-        if(Timer>0)
+        //ser om huvudet är inanaför spelarytan 
+        if(Head.x<0 || Head.y<0 || Head.x>(int)screenSize.X-interval || Head.y>screenSize.Y-interval)
+        {return true;}
+
+        // ser om huvudet överlappar med någon kroppsdel
+        for (var i = 0; i < bodyList.Count-1; i++)
         {
-            Timer-=Raylib.GetFrameTime();
-            return;
+            if(Raylib.CheckCollisionRecs(Head, bodyList[i]))
+            {
+                return true;
+            }
         }
-    }   
+        // om inte retunerar den falskt
+        return false;
+    }
+       
 }
