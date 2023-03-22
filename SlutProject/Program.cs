@@ -44,7 +44,7 @@ while(!Raylib.WindowShouldClose())
 
         foreach (Rectangle r in p.bodyList)
         {
-            int 
+            //count score 
         }
         p.bodyList.Clear();
 
