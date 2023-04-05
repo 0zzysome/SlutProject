@@ -1,13 +1,13 @@
 ﻿global using Raylib_cs;
 global using System.Numerics;
 global using System.Text.Json;
-
+global using System.Text.Json.Serialization;
 //settings
 Vector2 screenSize = new(960, 960);
 //grid size
 int lineInterval = 60;
 int Direction = 0;
-int score = 0;
+
 bool AreOverLapping = false;
 bool GameIsGoing = true;
 bool hasEnterdName = false;
@@ -17,14 +17,20 @@ Raylib.SetTargetFPS(2);
 
 Player p = new Player();
 apple A = new apple();
-Scoreboard Sb = new Scoreboard();
+Scoreboard Sb = new Scoreboard("scores.json");
 
 //scoreboard stuff
 string nameOfPlayer = "";
 List<char> nameChar = new List<char>();
-// pre start logik(i construct???)
+Score s1 = new Score();
+
+
 
 //nästa mål: skapa en scoreboard och lista ut hur man ska få en input till raylib.
+
+
+
+
 
 
 
@@ -51,7 +57,7 @@ while (!Raylib.WindowShouldClose())
             foreach (Rectangle r in p.bodyList)
             {
                 //count score 
-                score += 1;
+                s1.score += 1;
 
             }
             p.bodyList.Clear();
@@ -110,11 +116,16 @@ while (!Raylib.WindowShouldClose())
         }
         nameOfPlayer = new string(nameChar.ToArray());
 
-        Console.WriteLine(nameOfPlayer.Length);
+        
+        
         if (Raylib.IsKeyDown(KeyboardKey.KEY_ENTER))
         {
-            string json = JsonSerializer.Serialize<Scoreboard>(Sb);
+            hasEnterdName = true;
+            s1.Name = nameOfPlayer;
+            Sb.ScoreList.Add(s1);
+
         }
+        
     }
     //grafik
 
@@ -154,12 +165,30 @@ while (!Raylib.WindowShouldClose())
         Raylib.DrawText("Game Over", 300, 320, 60, Color.BLACK);
         //score
         Raylib.DrawText("score: ", ((int)screenSize.X/2-60), ((int)screenSize.Y/2+30), 20, Color.BLACK);
-        Raylib.DrawText(score.ToString(), ((int)screenSize.X/2+10), ((int)screenSize.Y/2+30), 20, Color.BLACK);
+        Raylib.DrawText(s1.score.ToString(), ((int)screenSize.X/2+10), ((int)screenSize.Y/2+30), 20, Color.BLACK);
     }
-   
+    else
+    {
+        
+        Sb.SortScoreBoard();
+        
+        for (var i = 0; i < Sb.ScoreList.Count; i++)
+        {
+
+             // Raylib.DrawText("score: ", ((int)screenSize.X/2-60), ((int)screenSize.Y/2+30*i), 20, Color.BLACK);
+            Raylib.DrawText(Sb.ScoreList[i].score.ToString(), ((int)screenSize.X/2+70), ((int)screenSize.Y/2+35*i)-100, 30, Color.BLACK);
+
+            Raylib.DrawText(Sb.ScoreList[i].Name, ((int)screenSize.X/2-70), ((int)screenSize.Y/2+35*i)-100, 30, Color.BLACK);
+
+            // Raylib.DrawText("name: ", ((int)screenSize.X/2-60), (int)screenSize.Y/2, 20, Color.BLACK);
+            
+        }
+    }
     Raylib.EndDrawing();
 
 
 }
 
+//sparar allt
+Sb.Save();
 
