@@ -2,6 +2,7 @@
 global using System.Numerics;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
+
 //settings
 Vector2 screenSize = new(960, 960);
 //grid size
@@ -61,6 +62,7 @@ while (!Raylib.WindowShouldClose())
 
             }
             p.bodyList.Clear();
+            
             GameIsGoing = false;
 
         }
@@ -92,9 +94,10 @@ while (!Raylib.WindowShouldClose())
             }
         }
     }
+    //game over skärm
     else
     {
-        
+        //tar bort bokstäver
         if (Raylib.IsKeyDown(KeyboardKey.KEY_BACKSPACE))
         {
             if (nameChar.Count > 0)
@@ -103,6 +106,7 @@ while (!Raylib.WindowShouldClose())
             }
 
         }
+        //tar emot bokstäver
         else
         {
             char c = (char)Raylib.GetCharPressed();
@@ -114,6 +118,7 @@ while (!Raylib.WindowShouldClose())
 
 
         }
+
         nameOfPlayer = new string(nameChar.ToArray());
 
         
@@ -122,7 +127,8 @@ while (!Raylib.WindowShouldClose())
         {
             hasEnterdName = true;
             s1.Name = nameOfPlayer;
-            Sb.ScoreList.Add(s1);
+            Sb.ScoreList.Add(Sb.ScoreList.Count,s1);
+            Sb.SortScoreBoard();
 
         }
         
@@ -170,10 +176,11 @@ while (!Raylib.WindowShouldClose())
     else
     {
         
-        Sb.SortScoreBoard();
         
-        for (var i = 0; i < Sb.ScoreList.Count; i++)
+        for (var i = 0; i < 5; i++)
         {
+            // int key = keys[i];
+            // Score s = Sb.ScoreList[key];
 
              // Raylib.DrawText("score: ", ((int)screenSize.X/2-60), ((int)screenSize.Y/2+30*i), 20, Color.BLACK);
             Raylib.DrawText(Sb.ScoreList[i].score.ToString(), ((int)screenSize.X/2+70), ((int)screenSize.Y/2+35*i)-100, 30, Color.BLACK);
