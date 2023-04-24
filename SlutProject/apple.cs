@@ -22,7 +22,7 @@ public class apple : GameObject
             int y = (generator.Next(blockAmountY)) * Interval;
             Rectangle r1 = new Rectangle(x,y, (Interval-1), (Interval-1));  
             appleSet.Add(r1);
-            //tar bort äpplet om det koliderar med spelaren 
+            //tar bort äpplet om det koliderar med spelaren     
             foreach (Rectangle r in p.bodyList)
             {
                 if(Raylib.CheckCollisionRecs(r1, r))

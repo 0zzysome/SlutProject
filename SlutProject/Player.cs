@@ -44,7 +44,48 @@ public class Player : GameObject
 3
 4
     */
+    /*
+    public void addToQueue(int Interval, int direc)
+    {
+        switch (direc)
+        {
+            case 0:
+                
+                x = (int)head.x;
+                y = (int)head.y - Interval;
+            break;
+            case 1:
+                
+                x = (int)head.x + Interval;
+                y = (int)head.y;
+            break;
+            case 2:
+                
+                x = (int)head.x;
+                y = (int)head.y + Interval;
+            break;
+            case 3:
+                
+                x = (int)head.x - Interval;
+                y = (int)head.y;
+            break;
+            default:
+                
+                x = (int)head.x - Interval;
+                y = (int)head.y;
+            break;
+        }
+        Rectangle r1 = new Rectangle(x,y, (Interval-1), (Interval-1));
+        head.x = x;
+        head.y = y;
+        bodyList.Add(r1);
+
+        
+    }
     
+    
+    
+    */
     public void addToQueue(int Interval, int direc)
     {
         switch (direc)
